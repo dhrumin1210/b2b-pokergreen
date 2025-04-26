@@ -10,14 +10,14 @@ return [
     'invalidCountryCode' => 'Invalid Country code. Please try again',
     'userVerifySuccess' => 'User verified successfully.',
     'userProfileUpdate' => 'Your profile updated successfully',
-    'userSignUpSuccess' => 'Otp sent to your mail.Please Verify your account via mail.',
+    'userSignUpSuccess' => 'Your account has been created successfully.Please login after admin activate your account.',
     'newPasswordMatchedWithCurrentPassword' => 'New Password can not be same as your current password.',
     'wrongCurrentPassword' => 'Current password is incorrect.',
     'updateUserVerifySuccess' => 'Your profile updated successfully. Otp sent to your mail.Please Verify your account via mail. ',
     'otpExpired' => 'Otp expired.',
     'logoutSuccess' => 'Logout successfully.',
     'otpExpired' => 'Otp expired.',
-    'inactiveUser' => 'Account Inactive: Please contact administrator to reactivate your account.',
+    'inactiveUser' => 'Account Inactive: Please contact administrator to activate your account.',
     'changeStatusSuccess' => 'User status has been updated to :status.',
     'passwordResetSent' => 'Reset password link sent to mail successfully.'
 ];
