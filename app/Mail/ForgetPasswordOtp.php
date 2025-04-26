@@ -8,8 +8,9 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Mail\Mailables\Envelope;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
-class ForgetPasswordOtp extends Mailable
+class ForgetPasswordOtp extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
@@ -24,7 +25,7 @@ class ForgetPasswordOtp extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: $this->data['subject'],
+            subject: __('email.forgetPassword.subject'),
         );
     }
 

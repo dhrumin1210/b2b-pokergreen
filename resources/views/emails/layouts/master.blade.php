@@ -5,7 +5,7 @@
     <div class="wrapper">
         <div class="content">
             <div class="header">
-                <img src="https://laravel.com/img/notification-logo.png" alt="Laravel Logo" class="logo">
+                <img src="{{ asset('assets/img/pokergreen-icon.webp') }}" alt="Laravel Logo" class="logo">
             </div>
 
             <!-- Email Body -->

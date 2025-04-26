@@ -20,5 +20,10 @@ return [
     'forgetPasswordOtpEmailLine1' => 'Use the following OTP to complete your Reset Password procedures. OTP is valid for 10 minutes.',
     'regards' => 'Best Regards,',
     'verifyUserLine1' => 'Thank you for choosing ' . config('app.name') . '. Use the following OTP to complete your
-     :subject process. OTP is valid for :expirationTime minutes.'
+     :subject process. OTP is valid for :expirationTime minutes.',
+    'forgetPassword' => [
+        'subject' => 'Your OTP to Reset Your Password',
+        'line1' => 'We received a request to reset the password for your ' . config('app.name') . ' account. Use the One-Time Password (OTP) below to proceed.',
+        'line2' => 'This OTP is valid for :minutes minutes. Please do not share it with anyone to keep your account secure.',
+    ],
 ];

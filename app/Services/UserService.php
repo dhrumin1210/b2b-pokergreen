@@ -62,6 +62,8 @@ class UserService
 
     public function changeStatus(object $user, array $inputs = [])
     {
+
+        $inputs['email_verified_at'] = $inputs['status'] == config('site.user_status.active') ? date('Y-m-d h:i:s') : null;
         $user->update($inputs);
         $data = [
             'message' => __('entity.entityUpdated', ['entity' => 'User status']),

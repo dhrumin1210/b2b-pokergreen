@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Traits\BaseModel;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -13,7 +14,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
-    use BaseModel, HasApiTokens, HasFactory, Notifiable, SoftDeletes;
+    use BaseModel, HasApiTokens, HasFactory, Notifiable, SoftDeletes, HasRoles;
+
 
     /**
      * The attributes that are mass assignable.
@@ -21,17 +23,16 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'first_name',
-        'last_name',
-        'username',
+        'role_id',
+        'name',
         'email',
         'status',
         'password',
-        'country_code',
-        'mobile_number',
+        'mobile',
+        'address',
         'email_verified_at',
-        'last_login_at',
     ];
+
 
     /**
      * The attributes that should be hidden for serialization.
@@ -47,7 +48,9 @@ class User extends Authenticatable
 
     protected $relationship = [];
 
-    protected $appends = ['name'];
+    protected $guard_name = 'api';
+
+    protected $appends = ['display_status'];
 
     /**
      * Get the attributes that should be cast.
@@ -59,18 +62,16 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
-            'last_login_at' => 'datetime',
             'created_at' => 'timestamp',
             'updated_at' => 'timestamp',
             'deleted_at' => 'timestamp',
         ];
     }
 
-    /** Accessors and Mutators */
-    protected function name(): Attribute
+    public function displayStatus(): Attribute
     {
-        return Attribute::make(
-            get: fn() => $this->first_name . ' ' . $this->last_name,
+        return new Attribute(
+            get: fn($value) => $value == config('site.user_status.active') ? 'Active' : 'Inactive',
         );
     }
 }
