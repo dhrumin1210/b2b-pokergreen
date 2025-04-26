@@ -11,7 +11,7 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
 
-    <link rel="shortcut icon" href="{{ asset('assets/img/favicon.png') }}" />
+    <link rel="shortcut icon" href="{{ asset('assets/img/pokergreen-icon.webp') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/developer/dashboard.css') }}">
 
 </head>
@@ -24,8 +24,7 @@
                     <div class="relative z-0 flex-1 px-2 d-flex items-center justify-center sm-absolute sm-inset-0">
                         <div class="relative">
                             <a href="{{ config('app.url') }}">
-                                <img class="h-12" src="{{ asset('assets/img/logo.png') }}"
-                                    alt="{{ config('app.name') }}">
+                                <img class="h-12" src="{{ asset('assets/img/pokergreen.webp') }}" alt="{{ config('app.name') }}">
                             </a>
                         </div>
                     </div>

@@ -78,22 +78,10 @@ class UserController extends Controller
                 required: ['first_name', 'last_name', 'username', 'email'],
                 properties: [
                     new OA\Property(
-                        property: 'first_name',
+                        property: 'name',
                         type: 'string',
                         format: 'first_name',
                         example: 'Test'
-                    ),
-                    new OA\Property(
-                        property: 'last_name',
-                        type: 'string',
-                        format: 'last_name',
-                        example: 'User'
-                    ),
-                    new OA\Property(
-                        property: 'username',
-                        type: 'string',
-                        format: 'username',
-                        example: 'user12'
                     ),
                     new OA\Property(
                         property: 'email',
@@ -102,7 +90,7 @@ class UserController extends Controller
                         example: 'test@gmail.com'
                     ),
                     new OA\Property(
-                        property: 'mobile_number',
+                        property: 'mobile',
                         type: 'string',
                         format: 'mobile',
                         example: '9090909090'

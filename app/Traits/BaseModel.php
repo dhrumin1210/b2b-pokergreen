@@ -35,8 +35,10 @@ trait BaseModel
             foreach ($relationshipObj->getFillable() as $field) {
                 $fields[] = $tableName . '.' . $field;
             }
-            foreach ($relationshipObj->queryable as $field) {
-                $fields[] = $tableName . '.' . $field;
+            if (isset($relationshipObj->queryable)) {
+                foreach ($relationshipObj->queryable as $field) {
+                    $fields[] = $tableName . '.' . $field;
+                }
             }
         }
 
@@ -75,6 +77,14 @@ trait BaseModel
         }
         $queryBuilder->allowedFilters($filters);
 
+        if (isset($this->defaultSorts)) {
+            $queryBuilder->defaultSort($this->defaultSorts);
+        }
+
+        if (isset($this->allowedSorts)) {
+            $queryBuilder->allowedSorts($this->allowedSorts);
+        }
+
         return $queryBuilder;
     }
 
@@ -84,10 +94,10 @@ trait BaseModel
     }
 
     /**
-     * 
+     *
      * GET /users?append=display_status,display_name
      * This will append this attributes to the response.
-     * 
+     *
      * If you define a protected property in model : protected $appends = ['display_status'];
      * Then 'display_status' will be appended to the response by default.
      */
@@ -101,7 +111,7 @@ trait BaseModel
 
     /**
      * Example: GET /api/v1/users?media=profile_image
-     * 
+     *
      * Dynamically adds the 'media' relationship to the 'include' query parameter
      * if the 'media' parameter is present in the request that prevent from n+1 query.
      */
