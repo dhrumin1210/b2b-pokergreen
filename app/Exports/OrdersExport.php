@@ -40,24 +40,38 @@ class OrdersExport implements FromQuery, WithHeadings, WithMapping
         return [
             'Order ID',
             'Customer Name',
+            'Location',
+            'Product',
+            'Weight',
+            'Unit',
+            'Quantity',
             'Total Weight',
-            'Status',
+            'Order Status',
             'Created At',
-            'Products'
         ];
     }
 
     public function map($order): array
     {
-        return [
-            $order->id,
-            $order->user->name,
-            $order->total_weight,
-            $order->status,
-            $order->created_at->format('Y-m-d H:i:s'),
-            $order->orderProducts->map(function($item) {
-                return $item->product->name . ' (' . $item->quantity . ' ' . $item->unit . ')';
-            })->implode(', ')
-        ];
+        $rows = [];
+
+        foreach ($order->orderProducts as $item) {
+            $totalWeight = $item->weight * $item->quantity;
+
+            $rows[] = [
+                $order->id,
+                $order->user->name,
+                $order->user->address,
+                $item->product->name,
+                $item->weight,
+                $item->unit,
+                $item->quantity,
+                $totalWeight . ' ' . $item->unit,
+                $order->status,
+                $order->created_at->format('Y-m-d H:i:s'),
+            ];
+        }
+
+        return $rows;
     }
 }
