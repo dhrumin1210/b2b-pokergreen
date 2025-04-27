@@ -23,7 +23,10 @@ class Resource extends JsonResource
     public function toArray(Request $request): array
     {
         $data = $this->fields();
-        $data['media'] = $this->resource->getMedia('featured')->first()?->getUrl();
+        $media = $this->resource->getMedia('featured')->first();
+
+        $data['media'] = $media;
+        $data['media']['url'] = $media?->getUrl();
         $data['variants'] = ProductVariantResource::collection($this->resource->variants);
         $data['category'] = new CategoryResource($this->resource->category);
 

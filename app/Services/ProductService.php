@@ -66,7 +66,7 @@ class ProductService
     {
         $product = $this->productObj->findOrFail($id);
 
-        if (request()->hasFile('media')) {
+        if (!isset($inputs['media_id']) &&  request()->hasFile('media')) {
 
             $oldMedia = $product->getMedia('featured')->first();
 

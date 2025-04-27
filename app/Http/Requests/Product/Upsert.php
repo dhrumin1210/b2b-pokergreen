@@ -21,18 +21,21 @@ class Upsert extends FormRequest
      */
     public function rules(): array
     {
-        $rules = [
+        return [
             'name' => 'required|string|max:255',
             'slug' => 'required|string|max:255|unique:products,slug,' . $this->route('product'),
             'category_id' => 'required|exists:categories,id',
             'description' => 'nullable|string',
             'status' => 'nullable|boolean',
+            'media' => 'nullable|file|mimes:jpg,jpeg,png,gif,webp|max:2048',
+            'media_id' => 'nullable|integer',
         ];
+    }
 
-        if ($this->isMethod('patch')) {
-            $rules['slug'] = 'required|string|max:255|unique:products,slug,' . $this->route('product');
-        }
-
-        return $rules;
+    public function messages(): array
+    {
+        return [
+            'media_id.exists' => 'The selected media is invalid.',
+        ];
     }
 }

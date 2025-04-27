@@ -20,6 +20,7 @@ class upsert extends FormRequest
             'name' => 'required|string|max:255',
             'slug' => 'nullable|string|max:255|unique:categories,slug,' . $id,
             'description' => 'nullable|string',
+            'media_id' => 'nullable|integer|exists:media,id', 
             'media' => 'nullable|file|mimes:jpg,jpeg,png,gif,webp|max:2048',
         ];
     }

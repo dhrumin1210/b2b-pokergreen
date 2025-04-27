@@ -37,7 +37,7 @@ class CategoryService
 
         $category = $this->category->create($inputs);
 
-        if (request()->hasFile('media')) {
+        if ( !isset($inputs['media_id']) &&  request()->hasFile('media')) {
             $media = MediaUploader::fromSource(request()->file('media'))
                 ->toDisk('public')
                 ->toDirectory('categories')

@@ -16,7 +16,9 @@ Route::post('/product-variants/batch-upsert', [ProductVariantController::class, 
 Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('users/{user}/change-status', UserStatusController::class);
 
-
+    Route::get('orders', [App\Http\Controllers\Api\V1\Admin\OrderController::class, 'index']);
+    Route::patch('orders/{order}/status', [App\Http\Controllers\Api\V1\Admin\OrderController::class, 'updateStatus']);
+    Route::get('orders/export', [App\Http\Controllers\Api\V1\Admin\OrderController::class, 'exportExcel']);
 });
 Route::post('login', [AuthController::class, 'login']);
 
