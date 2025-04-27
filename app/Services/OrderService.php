@@ -86,7 +86,7 @@ class OrderService
 
             // Create the order
             $order = Order::create([
-                'user_id' => Auth::id() ?? 1,
+                'user_id' => Auth::id(),
                 'total_weight' => $input['total_weight'],  // Assuming you calculate the total weight before
                 'status' => $input['status'] ?? 'pending',
             ]);
