@@ -8,6 +8,8 @@ use App\Jobs\VerifyUserMail;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\User\Resource;
+use App\Mail\UserApprovedMail;
+use Illuminate\Support\Facades\Mail;
 
 class UserService
 {
@@ -62,14 +64,22 @@ class UserService
 
     public function changeStatus(object $user, array $inputs = [])
     {
+        $wasInactive = $user->status != config('site.user_status.active');
 
-        $inputs['email_verified_at'] = $inputs['status'] == config('site.user_status.active') ? date('Y-m-d h:i:s') : null;
+        $inputs['email_verified_at'] = $inputs['status'] == config('site.user_status.active') ? now() : null;
         $user->update($inputs);
+
         $data = [
             'message' => __('entity.entityUpdated', ['entity' => 'User status']),
             'user' => new Resource($user),
         ];
 
+        if ($inputs['status'] == config('site.user_status.active') && $wasInactive) {
+            Mail::to($user->email)->send(new UserApprovedMail([
+                'user' => $user,
+                'name' => $user->name,
+            ]));
+        }
         return $data;
     }
 }

@@ -98,7 +98,6 @@ class AuthController extends Controller
     )]
     public function signUp(SignUpRequest $request): JsonResponse
     {
-
         $data = $this->authService->signup($request->validated());
 
         return $this->success($data, 200);

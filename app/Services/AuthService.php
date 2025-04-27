@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Password;
 use App\Http\Resources\User\Resource as UserResource;
 use App\Mail\ForgetPasswordOtp;
 use Illuminate\Support\Facades\Mail;
+use App\Mail\UserApprovalNotification;
 
 class AuthService
 {
@@ -42,6 +43,20 @@ class AuthService
         $inputs['role_id'] = config('site.roleIds.user');
         $user = $this->userObj->create($inputs);
         $user->assignRole(config('site.user_role.user'));
+
+        // Send notification to admins
+        $admins = $this->userObj->where('role_id', 1)->get();
+        foreach ($admins as $admin) {
+            try {
+                Mail::to($admin->email)->send(new UserApprovalNotification([
+                    'name' => $admin->name,
+                    'user' => $user,
+                ]));
+            } catch (\Exception $e) {
+                Log::error('Failed to send user approval notification to admin: ' . $e->getMessage());
+            }
+        }
+
         $data['message'] = __('message.userSignUpSuccess');
         $data['data'] = new UserResource($user);
         return $data;
