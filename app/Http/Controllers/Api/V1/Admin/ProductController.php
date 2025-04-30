@@ -3,7 +3,8 @@
 namespace App\Http\Controllers\Api\V1\Admin;
 
 use App\Services\ProductService;
-use App\Http\Controllers\Controller; 
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Product\Upsert;
 // use App\Http\Resources\ProductResource;
 use Illuminate\Http\Request;
 use App\Http\Resources\Product\Collection;
@@ -32,13 +33,13 @@ class ProductController extends Controller
         return $this->resource(new Resource($product));
     }
 
-    public function store(Request $request)
+    public function store(Upsert $request)
     {
         $product = $this->productService->create($request->all());
         return $this->resource(new Resource($product));
     }
 
-    public function update(Request $request, $id)
+    public function update(Upsert $request, $id)
     {
         $product = $this->productService->update($id, $request->all());
         return $this->resource(new Resource($product));
