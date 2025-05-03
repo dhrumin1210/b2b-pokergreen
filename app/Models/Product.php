@@ -26,6 +26,8 @@ class Product extends Model
         'status' => 'boolean',
     ];
 
+    protected $defaultSorts = '-id';
+    
     public function getSlugOptions() : SlugOptions
     {
         return SlugOptions::create()

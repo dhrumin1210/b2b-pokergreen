@@ -121,4 +121,84 @@ class UserController extends Controller
         $data = $this->userService->update(Auth::id(), $request->validated());
         return $this->success($data, 200);
     }
+
+    #[OA\Get(
+        path: '/api/v1/admin/users',
+        operationId: 'adminUserList',
+        tags: ['Admin / User'],
+        summary: 'Get list of users (role_id=2)',
+        parameters: [
+            new OA\Parameter(
+                name: 'X-Requested-With',
+                in: 'header',
+                required: true,
+                description: 'Custom header for XMLHttpRequest',
+                schema: new OA\Schema(type: 'string', default: 'XMLHttpRequest')
+            ),
+            new OA\Parameter(
+                name: 'media',
+                in: 'query',
+                description: 'For Include A Media : `profile`'
+            ),
+            new OA\Parameter(
+                name: 'filter[search]',
+                in: 'query',
+                description: 'Search by name or email'
+            ),
+            new OA\Parameter(
+                name: 'filter[status]',
+                in: 'query',
+                description: 'Filter by status (active, inactive)'
+            ),
+        ],
+        responses: [
+            new OA\Response(response: 200, description: 'Success.'),
+            new OA\Response(response: 401, description: 'Unauthorized'),
+        ],
+        security: [['bearerAuth' => []]]
+    )]
+    public function index()
+    {
+        $users = $this->userService->collection();
+        return $this->collection(UserResource::collection($users));
+    }
+
+    #[OA\Get(
+        path: '/api/v1/admin/users/{id}',
+        operationId: 'adminUserDetail',
+        tags: ['Admin / User'],
+        summary: 'Get user detail (role_id=2)',
+        parameters: [
+            new OA\Parameter(
+                name: 'id',
+                in: 'path',
+                required: true,
+                description: 'User ID',
+                schema: new OA\Schema(type: 'integer')
+            ),
+            new OA\Parameter(
+                name: 'X-Requested-With',
+                in: 'header',
+                required: true,
+                description: 'Custom header for XMLHttpRequest',
+                schema: new OA\Schema(type: 'string', default: 'XMLHttpRequest')
+            ),
+            new OA\Parameter(
+                name: 'media',
+                in: 'query',
+                description: 'For Include A Media : `profile`'
+            ),
+        ],
+        responses: [
+            new OA\Response(response: 200, description: 'Success.'),
+            new OA\Response(response: 404, description: 'Not found'),
+            new OA\Response(response: 401, description: 'Unauthorized'),
+        ],
+        security: [['bearerAuth' => []]]
+    )]
+    public function show($id)
+    {
+        $user = $this->userService->resource($id);
+        return $this->resource(new UserResource($user));
+    }
 }
