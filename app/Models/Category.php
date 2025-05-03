@@ -25,6 +25,9 @@ class Category extends Model
         'search',
     ];
 
+    protected $defaultSorts = '-id';
+
+
     public function getSlugOptions(): SlugOptions
     {
         return SlugOptions::create()

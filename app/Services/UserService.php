@@ -10,11 +10,14 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Resources\User\Resource;
+use App\Traits\PaginationTrait;
 use Illuminate\Support\Facades\Storage;
 use Plank\Mediable\Facades\MediaUploader;
 
 class UserService
 {
+    use PaginationTrait;
+
     private User $userObj;
 
     private UserOtpService $userOtpService;
@@ -24,6 +27,12 @@ class UserService
         $this->userObj = new User;
 
         $this->userOtpService = new UserOtpService;
+    }
+
+    public function collection()
+    {
+        $data = $this->userObj->getQB()->where('role_id', config('site.roleIds.user'));
+        return $this->paginationAttribute($data);
     }
 
     public function resource(int $id, array $inputs = []): User

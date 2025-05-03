@@ -57,6 +57,13 @@ class User extends Authenticatable
 
     protected $appends = ['display_status'];
 
+    protected $exactFilters = ['status'];
+
+    protected $defaultSorts = '-id';
+
+    protected $scopedFilters = [
+        'search',
+    ];
     /**
      * Get the attributes that should be cast.
      *
@@ -76,7 +83,17 @@ class User extends Authenticatable
     public function displayStatus(): Attribute
     {
         return new Attribute(
-            get: fn($value) => $value == config('site.user_status.active') ? 'Active' : 'Inactive',
+            get: fn($value) => $this->status == config('site.user_status.active') ? 'Active' : 'Inactive',
         );
+    }
+
+    /**
+     * Model Scopes
+     */
+    public function scopeSearch($query, $search)
+    {
+        return $query->where('name', 'like', '%' . $search . '%')
+            ->orWhere('email', 'like', '%' . $search . '%')
+            ->orWhere('mobile', 'like', '%' . $search . '%');
     }
 }

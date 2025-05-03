@@ -17,6 +17,7 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
 
     Route::get('me', [UserController::class, 'me']);
     Route::post('me', [UserController::class, 'updateProfile']);
+    Route::apiResource('users', UserController::class)->only(['index', 'show']);
 
     Route::apiResource('categories', CategoryController::class);
     Route::apiResource('products', ProductController::class);
