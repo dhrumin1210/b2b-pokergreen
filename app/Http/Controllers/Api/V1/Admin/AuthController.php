@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use OpenApi\Attributes as OA;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\Login;
+use Illuminate\Http\JsonResponse;
+use App\Http\Requests\Auth\UpdateProfile;
 
 class AuthController extends Controller
 {
@@ -69,7 +71,9 @@ class AuthController extends Controller
     )]
     public function login(Login $request)
     {
-        $response = $this->authService->login($request->all());
+        $response = $this->authService->login($request->all(), $isAdmin = true);
         return $this->success($response);
     }
+
+   
 }

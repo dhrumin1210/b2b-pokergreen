@@ -11,16 +11,27 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Category extends Model
 {
-    use BaseModel,Mediable, HasSlug, SoftDeletes;
-    
+    use BaseModel, Mediable, HasSlug, SoftDeletes;
+
     protected $fillable = ['name', 'slug', 'description', 'status'];
 
-    public function getSlugOptions() : SlugOptions
+    protected $relationship = [
+        'media' => [
+            'model' => Media::class,
+        ]
+    ];
+
+    protected $scopedFilters = [
+        'search',
+    ];
+
+    public function getSlugOptions(): SlugOptions
     {
         return SlugOptions::create()
             ->generateSlugsFrom('name')
             ->saveSlugsTo('slug');
     }
+
     public function scopeSearch($query, $search)
     {
         return $query->where('name', 'like', '%' . $search . '%');

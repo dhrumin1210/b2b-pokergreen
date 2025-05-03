@@ -1,18 +1,19 @@
 <?php
 
-namespace App\Http\Controllers\Api\V1;
+namespace App\Http\Controllers\Api\V1\Admin;
 
 use App\Traits\ApiResponser;
 use App\Services\UserService;
 use OpenApi\Attributes as OA;
-use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\Auth\UpdateProfile;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\User\Resource as UserResource;
+
 
 class UserController extends Controller
 {
+
     use ApiResponser;
 
     private UserService $userService;
@@ -23,15 +24,10 @@ class UserController extends Controller
     }
 
     #[OA\Get(
-        path: '/api/v1/me',
-        tags: ['Auth'],
+        path: '/api/v1/admin/me',
+        operationId: 'adminMyProfile',
+        tags: ['Admin / User'],
         summary: 'Get logged-in user details',
-        responses: [
-            new OA\Response(
-                response: 200,
-                description: 'Success'
-            ),
-        ],
         parameters: [
             new OA\Parameter(
                 name: 'X-Requested-With',
@@ -49,11 +45,18 @@ class UserController extends Controller
                 description: 'For Include A Media : `profile`'
             ),
         ],
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'Success.'
+            ),
+            new OA\Response(response: '401', description: 'Unauthorized'),
+        ],
         security: [[
             'bearerAuth' => [],
         ]]
     )]
-    public function me(): JsonResponse
+    public function me()
     {
         $user = $this->userService->resource(Auth::id());
 
@@ -61,9 +64,9 @@ class UserController extends Controller
     }
 
     #[OA\Post(
-        path: '/api/v1/me',
-        operationId: 'updateProfile',
-        tags: ['Auth'],
+        path: '/api/v1/admin/me',
+        operationId: 'adminUpdateProfile',
+        tags: ['Admin / User'],
         summary: 'Update Profile',
         parameters: [
             new OA\Parameter(
@@ -79,32 +82,30 @@ class UserController extends Controller
         ],
         requestBody: new OA\RequestBody(
             required: true,
-            content: [
-                new OA\MediaType(
-                    mediaType: 'multipart/form-data',
-                    schema: new OA\Schema(
-                        type: 'object',
-                        properties: [
-                            new OA\Property(
-                                property: 'name',
-                                type: 'string',
-                                example: 'John Doe'
-                            ),
-                            new OA\Property(
-                                property: 'mobile',
-                                type: 'string',
-                                example: '1234567890'
-                            ),
-                            new OA\Property(
-                                property: 'profile_image',
-                                type: 'string',
-                                format: 'binary',
-                                description: 'Profile image file (jpg, jpeg, png, gif)'
-                            ),
-                        ]
-                    )
+            content: new OA\MediaType(
+                mediaType: 'multipart/form-data',
+                schema: new OA\Schema(
+                    type: 'object',
+                    properties: [
+                        new OA\Property(
+                            property: 'name',
+                            type: 'string',
+                            example: 'John Doe'
+                        ),
+                        new OA\Property(
+                            property: 'mobile',
+                            type: 'string',
+                            example: '1234567890'
+                        ),
+                        new OA\Property(
+                            property: 'profile_image',
+                            type: 'string',
+                            format: 'binary',
+                            description: 'Profile image file (jpg, jpeg, png, gif)'
+                        ),
+                    ]
                 )
-            ]
+            )
         ),
         responses: [
             new OA\Response(response: '200', description: 'Profile updated successfully'),
@@ -115,10 +116,9 @@ class UserController extends Controller
             'bearerAuth' => [],
         ]]
     )]
-    public function updateProfile(UpdateProfile $request): JsonResponse
+    public function updateProfile(UpdateProfile $request)
     {
         $data = $this->userService->update(Auth::id(), $request->validated());
-
         return $this->success($data, 200);
     }
 }

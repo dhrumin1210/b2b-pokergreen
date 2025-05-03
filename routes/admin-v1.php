@@ -7,12 +7,17 @@ use App\Http\Controllers\Api\V1\Admin\AuthController;
 use App\Http\Controllers\Api\V1\Admin\OrderController;
 use App\Http\Controllers\Api\V1\Admin\UserStatusController;
 use App\Http\Controllers\Api\V1\Admin\ProductVariantController;
+use App\Http\Controllers\Api\V1\Admin\UserController;
 
 // Admin authentication (login) route can remain public if needed
 Route::post('login', [AuthController::class, 'login']);
 
 // All other admin routes require authentication
 Route::middleware(['auth:sanctum', 'admin'])->group(function () {
+
+    Route::get('me', [UserController::class, 'me']);
+    Route::post('me', [UserController::class, 'updateProfile']);
+
     Route::apiResource('categories', CategoryController::class);
     Route::apiResource('products', ProductController::class);
     Route::apiResource('products.variants', ProductVariantController::class);

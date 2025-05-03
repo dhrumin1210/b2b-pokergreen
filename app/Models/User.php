@@ -11,10 +11,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Plank\Mediable\Mediable;
 
 class User extends Authenticatable
 {
-    use BaseModel, HasApiTokens, HasFactory, Notifiable, SoftDeletes, HasRoles;
+    use BaseModel, HasApiTokens, HasFactory, Notifiable, SoftDeletes, HasRoles, Mediable;
 
 
     /**
@@ -46,7 +47,11 @@ class User extends Authenticatable
 
     // protected $dates = ['created_at'];
 
-    protected $relationship = [];
+    protected $relationship = [
+        'media' => [
+            'model' => Media::class,
+        ]
+    ];
 
     protected $guard_name = 'api';
 

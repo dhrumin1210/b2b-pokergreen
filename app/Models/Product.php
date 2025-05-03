@@ -3,11 +3,11 @@
 namespace App\Models;
 
 use App\Traits\BaseModel;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Plank\Mediable\Mediable;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Product extends Model
 {
