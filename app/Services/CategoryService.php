@@ -21,6 +21,10 @@ class CategoryService
     {
         $query = $this->category->getQB();
 
+        if (isset($inputs['serach'])) {
+            $query->serach($inputs['serach']);
+        }
+
         return $this->paginationAttribute($query, $inputs);
     }
 
@@ -37,7 +41,7 @@ class CategoryService
 
         $category = $this->category->create($inputs);
 
-        if ( !isset($inputs['media_id']) &&  request()->hasFile('media')) {
+        if (!isset($inputs['media_id']) &&  request()->hasFile('media')) {
             $media = MediaUploader::fromSource(request()->file('media'))
                 ->toDisk('public')
                 ->toDirectory('categories')
@@ -59,18 +63,18 @@ class CategoryService
         if (request()->hasFile('media')) {
             // Get old media
             $oldMedia = $category->getMedia('featured')->first();
-        
+
             // Upload new media
             $media = MediaUploader::fromSource(request()->file('media'))
                 ->toDisk('public')
                 ->toDirectory('categories')
                 ->upload();
-        
+
             // Associate the new media
             $category->syncMedia($media, 'featured');
-        
+
             // Delete old media file from disk and DB
-            if ($oldMedia && $media){
+            if ($oldMedia && $media) {
                 $oldMedia->delete(); // this deletes both DB record and physical file
             }
         }
@@ -83,7 +87,7 @@ class CategoryService
         $category = $this->resource($id);
 
         if ($category->hasMedia('featured')) {
-            $category->getMedia('featured')->delete(); // Delete the media file
+            $category->getMedia('featured')->each->delete(); // Delete all media files
         }
 
         return $category->delete();

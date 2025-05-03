@@ -54,6 +54,6 @@ class CategoryController extends Controller
     {
         $this->categoryService->delete($id);
 
-        return response()->json(['message' => 'Category deleted successfully'], Response::HTTP_NO_CONTENT);
+        return response()->json(['message' => 'Category deleted successfully'], 200);
     }
 }
