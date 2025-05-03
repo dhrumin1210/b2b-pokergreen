@@ -39,6 +39,11 @@ class CategoryController extends Controller
                 in: 'query',
                 description: 'Include media: `featured`',
             ),
+            new OA\Parameter(
+                name: 'filter[search]',
+                in: 'query',
+                description: 'Search by name',
+            ),
         ],
         responses: [
             new OA\Response(response: 200, description: 'Success.'),

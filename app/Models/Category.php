@@ -21,12 +21,17 @@ class Category extends Model
         ]
     ];
 
+    protected $scopedFilters = [
+        'search',
+    ];
+
     public function getSlugOptions(): SlugOptions
     {
         return SlugOptions::create()
             ->generateSlugsFrom('name')
             ->saveSlugsTo('slug');
     }
+
     public function scopeSearch($query, $search)
     {
         return $query->where('name', 'like', '%' . $search . '%');
