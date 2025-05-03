@@ -21,8 +21,8 @@ class Category extends Model
             ->generateSlugsFrom('name')
             ->saveSlugsTo('slug');
     }
-    public function scopeSerach($query, $serach)
+    public function scopeSearch($query, $search)
     {
-        return $query->where('name', 'like', '%' . $serach . '%');
+        return $query->where('name', 'like', '%' . $search . '%');
     }
 }

@@ -21,8 +21,8 @@ class CategoryService
     {
         $query = $this->category->getQB();
 
-        if (isset($inputs['serach'])) {
-            $query->serach($inputs['serach']);
+        if (isset($inputs['search'])) {
+            $query->search($inputs['search']);
         }
 
         return $this->paginationAttribute($query, $inputs);
