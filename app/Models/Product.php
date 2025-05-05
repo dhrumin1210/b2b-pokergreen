@@ -11,8 +11,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Product extends Model
 {
-    use BaseModel,Mediable, HasSlug, SoftDeletes;
-    
+    use BaseModel, Mediable, HasSlug, SoftDeletes;
+
     protected $fillable = [
         'category_id',
         'name',
@@ -27,8 +27,8 @@ class Product extends Model
     ];
 
     protected $defaultSorts = '-id';
-    
-    public function getSlugOptions() : SlugOptions
+
+    public function getSlugOptions(): SlugOptions
     {
         return SlugOptions::create()
             ->generateSlugsFrom('name')
@@ -44,6 +44,11 @@ class Product extends Model
     public function variants()
     {
         return $this->hasMany(ProductVariant::class);
+    }
+
+    public function orderProducts()
+    {
+        return $this->hasMany(OrderProduct::class);
     }
 
     // Scope
