@@ -18,21 +18,11 @@ class OrdersExport implements FromQuery, WithHeadings, WithMapping
 
     public function query()
     {
-        $query = Order::query()->with(['user', 'orderProducts.product', 'orderProducts.productVariant']);
-
-        if (isset($this->filters['start_date'])) {
-            $query->whereDate('created_at', '>=', $this->filters['start_date']);
-        }
-
-        if (isset($this->filters['end_date'])) {
-            $query->whereDate('created_at', '<=', $this->filters['end_date']);
-        }
-
-        if (isset($this->filters['status'])) {
-            $query->where('status', $this->filters['status']);
-        }
-
-        return $query;
+        return Order::query()
+            ->with(['user', 'orderProducts.product', 'orderProducts.productVariant'])
+            ->when($this->filters['start_date'] ?? null, fn($q, $v) => $q->whereDate('created_at', '>=', $v))
+            ->when($this->filters['end_date'] ?? null, fn($q, $v) => $q->whereDate('created_at', '<=', $v))
+            ->when($this->filters['status'] ?? null, fn($q, $v) => $q->where('status', $v));
     }
 
     public function headings(): array
@@ -53,25 +43,23 @@ class OrdersExport implements FromQuery, WithHeadings, WithMapping
 
     public function map($order): array
     {
-        $rows = [];
+        $item = $order->orderProducts->first(); // Simplified
 
-        foreach ($order->orderProducts as $item) {
-            $totalWeight = $item->weight * $item->quantity;
+        if (!$item) return array_fill(0, 10, '-');
 
-            $rows[] = [
-                $order->id,
-                $order->user->name,
-                $order->address,
-                $item->product->name,
-                $item->weight,
-                $item->unit,
-                $item->quantity,
-                $totalWeight . ' ' . $item->unit,
-                $order->status,
-                $order->created_at->format('Y-m-d H:i:s'),
-            ];
-        }
+        $totalWeight = $item->weight * $item->quantity;
 
-        return $rows;
+        return [
+            $order->id,
+            $order->user->name ?? '-',
+            $order->address ?? '-',
+            $item->product->name ?? '-',
+            $item->weight,
+            $item->unit,
+            $item->quantity,
+            $totalWeight . ' ' . $item->unit,
+            $order->status,
+            $order->created_at->format('Y-m-d H:i:s'),
+        ];
     }
 }

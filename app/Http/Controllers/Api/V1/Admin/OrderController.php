@@ -175,6 +175,21 @@ class OrderController extends Controller
     )]
     public function exportExcel(Request $request)
     {
-        return Excel::download(new OrdersExport($request->all()), 'orders.xlsx');
+        if (ob_get_length()) {
+            ob_end_clean(); // prevent broken Excel files
+        }
+
+        $from = $request->get('start_date');
+        $to = $request->get('end_date');
+
+        $fileName = 'orders';
+        if ($from && $to) {
+            $fileName = "orders_{$from}_to_{$to}";
+        }
+
+        return \Maatwebsite\Excel\Facades\Excel::download(
+            new \App\Exports\OrdersExport($request->all()),
+            $fileName . '.xlsx'
+        );
     }
 }

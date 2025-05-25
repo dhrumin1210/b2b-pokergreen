@@ -44,6 +44,9 @@ class DashboardController extends Controller
         $productCount = Product::count();
         $categoryCount = Category::count();
         $userCount = User::count();
+        $receivedOrderCount = Order::where('status', 'received')->count();
+        $processedOrderCount = Order::where('status', 'processed')->count();
+        $deliveredOrderCount = Order::where('status', 'delivered')->count();
 
         return $this->success([
             'today_order_count' => $todayOrderCount,
@@ -51,6 +54,9 @@ class DashboardController extends Controller
             'product_count' => $productCount,
             'category_count' => $categoryCount,
             'user_count' => $userCount,
+            'received_order_count' => $receivedOrderCount,
+            'processed_order_count' => $processedOrderCount,
+            'delivered_order_count' => $deliveredOrderCount,
         ]);
     }
 }
