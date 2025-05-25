@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\V1\Admin\OrderController;
 use App\Http\Controllers\Api\V1\Admin\UserStatusController;
 use App\Http\Controllers\Api\V1\Admin\ProductVariantController;
 use App\Http\Controllers\Api\V1\Admin\UserController;
+use App\Http\Controllers\Api\V1\Admin\DashboardController;
 
 // Admin authentication (login) route can remain public if needed
 Route::post('login', [AuthController::class, 'login']);
@@ -30,4 +31,5 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::get('orders', [OrderController::class, 'index']);
     Route::patch('orders/{order}/status', [OrderController::class, 'updateStatus']);
     Route::get('orders/export', [OrderController::class, 'exportExcel']);
+    Route::get('dashboard-stats', [DashboardController::class, 'stats']);
 });
