@@ -19,5 +19,6 @@ return [
     'otpExpired' => 'Otp expired.',
     'inactiveUser' => 'Account Inactive: Please contact administrator to activate your account.',
     'changeStatusSuccess' => 'User status has been updated to :status.',
-    'passwordResetSent' => 'Reset password link sent to mail successfully.'
+    'passwordResetSent' => 'Reset password link sent to mail successfully.',
+    'unauthorizedAdminAccess' => 'Unauthorized: You do not have permission to access the admin panel.',
 ];

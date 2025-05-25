@@ -4,10 +4,11 @@ namespace App\Services;
 
 use App\Models\Product;
 use App\Traits\PaginationTrait;
+use App\Exceptions\CustomException;
 use Illuminate\Support\Facades\Auth;
+use Plank\Mediable\Facades\MediaUploader;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Plank\Mediable\Facades\MediaUploader;
 
 class ProductService
 {
@@ -91,10 +92,13 @@ class ProductService
     public function delete(int $id): bool
     {
         $product = $this->productObj->findOrFail($id);
+        if ($product->orderProducts()->exists()) {
+            throw new CustomException('Cannot delete product as it has associated orders.');
+        }
         $product->variants()->delete();
 
         if ($product->hasMedia('featured')) {
-            $product->getFirstMedia('featured')->delete(); // Delete the media file
+            $product->getMedia('featured')->each->delete(); // Delete the media file
         }
 
         return $product->delete();

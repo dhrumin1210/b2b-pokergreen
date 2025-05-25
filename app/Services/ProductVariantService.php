@@ -73,6 +73,10 @@ class ProductVariantService
             throw new CustomException(__('entity.entityMismatch', ['entity' => 'Product Variant']), 404);
         }
 
+        if ($variant->orderProducts()->exists()) {
+            throw new CustomException('Cannot delete product variant because it has associated orders', 400);
+        }
+
         return $variant->delete();
     }
 

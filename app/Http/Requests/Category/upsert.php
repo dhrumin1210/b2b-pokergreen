@@ -4,7 +4,7 @@ namespace App\Http\Requests\Category;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class upsert extends FormRequest
+class Upsert extends FormRequest
 {
 
     public function authorize(): bool

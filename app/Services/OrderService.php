@@ -18,6 +18,7 @@ class OrderService
 
     public function __construct()
     {
+      
         $this->order = new Order;
     }
 
@@ -37,6 +38,8 @@ class OrderService
             $query->where('status', $inputs['status']);
         }
 
+        $query->orderBy('created_at', 'desc');
+
         return $this->paginationAttribute($query, $inputs);
     }
 
@@ -54,6 +57,7 @@ class OrderService
         if (isset($inputs['status'])) {
             $query->where('status', $inputs['status']);
         }
+        $query->orderBy('created_at', 'desc');
 
         return $this->paginationAttribute($query, $inputs);
     }
@@ -85,19 +89,26 @@ class OrderService
             }
 
             // Create the order
+            $user = Auth::user();
             $order = Order::create([
-                'user_id' => Auth::id(),
+                'user_id' => $user->id,
                 'total_weight' => $input['total_weight'],  // Assuming you calculate the total weight before
-                'status' => $input['status'] ?? 'pending',
+                'status' => $input['status'] ?? 'received',
+                'address' => $input['address'] ?? $user->address ?? null,
             ]);
 
             // Loop through order items and add them to the order
             foreach ($input['order_products'] as $orderProduct) {
                 $variant = ProductVariant::findOrFail($orderProduct['product_variant_id']);  // Ensure the variant exists
 
+                $product = $variant->product;
                 $order->orderProducts()->create([
                     'product_id' => $orderProduct['product_id'],
+                    'product_name' => $product->name,
+                    'product_description' => $product->description,
                     'product_variant_id' => $orderProduct['product_variant_id'],
+                    'variant_weight' => $variant->weight,
+                    'variant_unit' => $variant->unit,
                     'weight' => $variant->weight,
                     'unit' => $variant->unit,
                     'quantity' => $orderProduct['quantity'],

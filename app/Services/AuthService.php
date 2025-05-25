@@ -62,7 +62,7 @@ class AuthService
         return $data;
     }
 
-    public function login(array $inputs): array
+    public function login(array $inputs, bool $isAdmin = false): array
     {
         $user = $this->userObj->where('email', $inputs['email'])->first();
 
@@ -72,6 +72,13 @@ class AuthService
 
         if ($user->status == config('site.user_status.inactive')) {
             throw new CustomException(__('message.inactiveUser'));
+        }
+
+        // Check if user is trying to access admin panel
+        if ($isAdmin) {
+            if ($user->role_id != config('site.roleIds.admin')) {
+                throw new CustomException(__('message.unauthorizedAdminAccess'));
+            }
         }
 
         $data = [

@@ -11,10 +11,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Plank\Mediable\Mediable;
 
 class User extends Authenticatable
 {
-    use BaseModel, HasApiTokens, HasFactory, Notifiable, SoftDeletes, HasRoles;
+    use BaseModel, HasApiTokens, HasFactory, Notifiable, SoftDeletes, HasRoles, Mediable;
 
 
     /**
@@ -46,12 +47,23 @@ class User extends Authenticatable
 
     // protected $dates = ['created_at'];
 
-    protected $relationship = [];
+    protected $relationship = [
+        'media' => [
+            'model' => Media::class,
+        ]
+    ];
 
     protected $guard_name = 'api';
 
     protected $appends = ['display_status'];
 
+    protected $exactFilters = ['status'];
+
+    protected $defaultSorts = '-id';
+
+    protected $scopedFilters = [
+        'search',
+    ];
     /**
      * Get the attributes that should be cast.
      *
@@ -71,7 +83,17 @@ class User extends Authenticatable
     public function displayStatus(): Attribute
     {
         return new Attribute(
-            get: fn($value) => $value == config('site.user_status.active') ? 'Active' : 'Inactive',
+            get: fn($value) => $this->status == config('site.user_status.active') ? 'Active' : 'Inactive',
         );
+    }
+
+    /**
+     * Model Scopes
+     */
+    public function scopeSearch($query, $search)
+    {
+        return $query->where('name', 'like', '%' . $search . '%')
+            ->orWhere('email', 'like', '%' . $search . '%')
+            ->orWhere('mobile', 'like', '%' . $search . '%');
     }
 }

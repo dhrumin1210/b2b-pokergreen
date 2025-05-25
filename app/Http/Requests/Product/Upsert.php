@@ -23,7 +23,7 @@ class Upsert extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'slug' => 'required|string|max:255|unique:products,slug,' . $this->route('product'),
+            'slug' => 'nullable|string|max:255|unique:products,slug,' . $this->route('product'),
             'category_id' => 'required|exists:categories,id',
             'description' => 'nullable|string',
             'status' => 'nullable|boolean',

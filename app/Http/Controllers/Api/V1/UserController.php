@@ -43,6 +43,11 @@ class UserController extends Controller
                     default: 'XMLHttpRequest'
                 )
             ),
+            new OA\Parameter(
+                name: 'media',
+                in: 'query',
+                description: 'For Include A Media : `profile`'
+            ),
         ],
         security: [[
             'bearerAuth' => [],
@@ -74,36 +79,37 @@ class UserController extends Controller
         ],
         requestBody: new OA\RequestBody(
             required: true,
-            content: new OA\JsonContent(
-                required: ['first_name', 'last_name', 'username', 'email'],
-                properties: [
-                    new OA\Property(
-                        property: 'name',
-                        type: 'string',
-                        format: 'first_name',
-                        example: 'Test'
-                    ),
-                    new OA\Property(
-                        property: 'email',
-                        type: 'string',
-                        format: 'email',
-                        example: 'test@gmail.com'
-                    ),
-                    new OA\Property(
-                        property: 'mobile',
-                        type: 'string',
-                        format: 'mobile',
-                        example: '9090909090'
-                    ),
-                ]
-            ),
+            content: [
+                new OA\MediaType(
+                    mediaType: 'multipart/form-data',
+                    schema: new OA\Schema(
+                        type: 'object',
+                        properties: [
+                            new OA\Property(
+                                property: 'name',
+                                type: 'string',
+                                example: 'John Doe'
+                            ),
+                            new OA\Property(
+                                property: 'mobile',
+                                type: 'string',
+                                example: '1234567890'
+                            ),
+                            new OA\Property(
+                                property: 'profile_image',
+                                type: 'string',
+                                format: 'binary',
+                                description: 'Profile image file (jpg, jpeg, png, gif)'
+                            ),
+                        ]
+                    )
+                )
+            ]
         ),
         responses: [
-            new OA\Response(
-                response: '200',
-                description: 'Success.',
-            ),
-            new OA\Response(response: '400', description: 'Validation errors!'),
+            new OA\Response(response: '200', description: 'Profile updated successfully'),
+            new OA\Response(response: '400', description: 'Validation errors'),
+            new OA\Response(response: '401', description: 'Unauthorized'),
         ],
         security: [[
             'bearerAuth' => [],

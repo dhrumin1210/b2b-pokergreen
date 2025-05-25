@@ -6,6 +6,7 @@ use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Traits\ResourceFilterable;
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Http\Resources\Media\Resource as MediaResource;
 
 class Resource extends JsonResource
 {
@@ -24,7 +25,6 @@ class Resource extends JsonResource
 
         $media = $this->resource->getMedia('featured')->first();
 
-        $data['media'] = $media;
         $data['media']['url'] = $media?->getUrl();
 
         return $data;
