@@ -12,7 +12,11 @@ class OrderProduct extends Model
     protected $fillable = [
         'order_id',
         'product_id',
+        'product_name',
+        'product_description',
         'product_variant_id',
+        'variant_weight',
+        'variant_unit',
         'weight',
         'unit',
         'total_weight',

@@ -98,7 +98,7 @@ class ProductService
         $product->variants()->delete();
 
         if ($product->hasMedia('featured')) {
-            $product->getFirstMedia('featured')->delete(); // Delete the media file
+            $product->getMedia('featured')->each->delete(); // Delete the media file
         }
 
         return $product->delete();

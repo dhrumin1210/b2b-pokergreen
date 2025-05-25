@@ -93,10 +93,43 @@ class OrderController extends Controller
     public function updateStatus(Order $order, Request $request)
     {
         $request->validate([
-            'status' => 'required|string|in:pending,processing,completed,cancelled'
+            'status' => 'required|string|in:received,processed,delivered'
         ]);
 
         $order = $this->orderService->updateOrderStatus($order->id, $request->status);
+        return $this->resource(new Resource($order));
+    }
+
+    #[OA\Get(
+        path: '/api/v1/admin/orders/{order}',
+        tags: ['Admin / Orders'],
+        operationId: 'showOrder',
+        summary: 'Get order details',
+        security: [['bearerAuth' => []]],
+        parameters: [
+            new OA\Parameter(
+                name: 'order',
+                in: 'path',
+                required: true,
+                description: 'Order ID',
+                schema: new OA\Schema(type: 'integer')
+            ),
+            new OA\Parameter(
+                name: 'X-Requested-With',
+                in: 'header',
+                required: true,
+                description: 'Custom header for XMLHttpRequest',
+                schema: new OA\Schema(type: 'string', default: 'XMLHttpRequest')
+            ),
+        ],
+        responses: [
+            new OA\Response(response: '200', description: 'Success.'),
+            new OA\Response(response: '401', description: 'Unauthorized'),
+            new OA\Response(response: '404', description: 'Order not found'),
+        ],
+    )]
+    public function show(Order $order)
+    {
         return $this->resource(new Resource($order));
     }
 

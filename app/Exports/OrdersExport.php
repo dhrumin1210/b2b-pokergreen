@@ -61,7 +61,7 @@ class OrdersExport implements FromQuery, WithHeadings, WithMapping
             $rows[] = [
                 $order->id,
                 $order->user->name,
-                $order->user->address,
+                $order->address,
                 $item->product->name,
                 $item->weight,
                 $item->unit,

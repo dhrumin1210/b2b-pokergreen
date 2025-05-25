@@ -26,7 +26,7 @@ class BatchUpsert extends FormRequest
             'variants' => 'required|array|min:1',
             'variants.*.variant_id' => 'nullable|exists:product_variants,id',
             'variants.*.weight' => 'required|numeric|min:0.01',
-            'variants.*.unit' => 'required|string|in:kg,gm,pc'
+            'variants.*.unit' => 'required|string|in:kg,gm,pcs'
         ];
     }
 }

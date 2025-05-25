@@ -16,6 +16,7 @@ class UpdateProfile extends FormRequest
         return [
             'name' => 'required|max:120',
             'mobile' => 'required|digits:10',
+            'address' => 'required',
             'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg',
         ];
     }
