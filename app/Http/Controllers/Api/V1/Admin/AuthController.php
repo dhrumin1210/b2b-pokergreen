@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Api\V1\Admin;
 
-use App\Services\AuthService;
 use App\Traits\ApiResponser;
 use Illuminate\Http\Request;
+use App\Services\AuthService;
 use OpenApi\Attributes as OA;
-use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\Login;
 use Illuminate\Http\JsonResponse;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\UpdateProfile;
 
 class AuthController extends Controller
