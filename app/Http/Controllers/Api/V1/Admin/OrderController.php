@@ -167,6 +167,20 @@ class OrderController extends Controller
                 required: false,
                 description: 'Filter by order status : ```pending,processing,completed,cancelled```',
             ),
+            new OA\Parameter(
+                name: 'user_id',
+                in: 'query',
+                required: false,
+                description: 'Filter by user ID',
+                schema: new OA\Schema(type: 'integer')
+            ),
+            new OA\Parameter(
+                name: 'product_id',
+                in: 'query',
+                required: false,
+                description: 'Filter by product ID',
+                schema: new OA\Schema(type: 'integer')
+            ),
         ],
         responses: [
             new OA\Response(response: '200', description: 'Excel file download.'),
@@ -175,21 +189,8 @@ class OrderController extends Controller
     )]
     public function exportExcel(Request $request)
     {
-        if (ob_get_length()) {
-            ob_end_clean(); // prevent broken Excel files
-        }
-
-        $from = $request->get('start_date');
-        $to = $request->get('end_date');
-
-        $fileName = 'orders';
-        if ($from && $to) {
-            $fileName = "orders_{$from}_to_{$to}";
-        }
-
-        return \Maatwebsite\Excel\Facades\Excel::download(
-            new \App\Exports\OrdersExport($request->all()),
-            $fileName . '.xlsx'
-        );
+        $filters = $request->all();
+        // Use OrdersExport for all scenarios - it handles different formats internally
+        return Excel::download(new OrdersExport($filters), 'orders.xlsx');
     }
 }

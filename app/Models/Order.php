@@ -13,7 +13,12 @@ class Order extends Model
     protected $fillable = [
         'user_id',
         'status',
-        'address'
+        'address',
+        'created_at'
+    ];
+
+    protected $casts = [
+        'created_at' => 'timestamp'
     ];
 
     public function user()

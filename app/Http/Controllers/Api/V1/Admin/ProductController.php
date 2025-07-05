@@ -92,7 +92,7 @@ class ProductController extends Controller
             new OA\Response(response: '401', description: 'Unauthorized'),
             new OA\Response(response: '404', description: 'Product not found'),
         ],
-        
+
     )]
     public function show($id)
     {
@@ -249,6 +249,6 @@ class ProductController extends Controller
     public function destroy($id)
     {
         $this->productService->delete($id);
-        return response()->json(['message' => 'Product variant deleted successfully'], 200);
+        return response()->json(['message' => 'Product deleted successfully'], 200);
     }
 }

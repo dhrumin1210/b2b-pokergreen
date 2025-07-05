@@ -92,9 +92,9 @@ class ProductService
     public function delete(int $id): bool
     {
         $product = $this->productObj->findOrFail($id);
-        if ($product->orderProducts()->exists()) {
-            throw new CustomException('Cannot delete product as it has associated orders.');
-        }
+        // if ($product->orderProducts()->exists()) {
+        //     throw new CustomException('Cannot delete product as it has associated orders.');
+        // }
         $product->variants()->delete();
 
         if ($product->hasMedia('featured')) {
